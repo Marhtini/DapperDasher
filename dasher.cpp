@@ -29,6 +29,13 @@ int main(){
 
     int velocity{0};
 
+    // for tracking current animation frame
+    int frame{0};
+    // update the scarfy animation 12 times per second.
+    const float updateTime{1.0 / 12.0};
+    // time since last updated animation
+    float runningTime{0};
+
     SetTargetFPS(60);
 
     while(!WindowShouldClose()){
@@ -36,9 +43,19 @@ int main(){
         // delta time (time since last frame)
         const float DT{GetFrameTime()};
         
+        runningTime += DT;
+        if (runningTime >= updateTime){
+            runningTime = 0.0;
+            // for drawing/updating which sprite to use on the sprite sheet
+            scarfyRec.x = frame * scarfyRec.width;
+            frame++;
+            if (frame > 5){
+                frame = 0;
+            }
+        }
+
         BeginDrawing();
         ClearBackground(WHITE);
-
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
 
         if(scarfyPos.y >= WINDOW_H - scarfyRec.height){
