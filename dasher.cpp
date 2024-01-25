@@ -9,14 +9,17 @@ int main(){
     // acceleration due to gravity (pixels/s)/s
     const int GRAV{1000};
 
+    // NEBULA VARIABLES
+    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+    Rectangle nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
+    Vector2 nebulaPos{WINDOW_W, WINDOW_H - nebula.height};
+
+    // nebula X velocity (pixels/sec)
+    int nebVel{-600};
+
+    // SCARFY VARIABLES
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
-    
-    Rectangle scarfyRec;
-    scarfyRec.width = scarfy.width/6; // six images in the sprite sheet
-    scarfyRec.height = scarfy.height;
-    scarfyRec.x = 0;
-    scarfyRec.y = 0;
-    
+    Rectangle scarfyRec{0.0, 0.0, scarfy.width/6, scarfy.height};
     Vector2 scarfyPos;
     scarfyPos.x = WINDOW_W/2 - scarfyRec.width/2;
     scarfyPos.y = WINDOW_H - scarfyRec.height;
@@ -31,8 +34,10 @@ int main(){
 
     // for tracking current animation frame
     int frame{0};
+
     // update the scarfy animation 12 times per second.
     const float updateTime{1.0 / 12.0};
+
     // time since last updated animation
     float runningTime{0};
 
@@ -44,7 +49,7 @@ int main(){
         const float DT{GetFrameTime()};
         
         runningTime += DT;
-        if (runningTime >= updateTime){
+        if (runningTime >= updateTime && !isInAir){
             runningTime = 0.0;
             // for drawing/updating which sprite to use on the sprite sheet
             scarfyRec.x = frame * scarfyRec.width;
@@ -56,6 +61,10 @@ int main(){
 
         BeginDrawing();
         ClearBackground(WHITE);
+        
+        // draw nebula
+        DrawTextureRec(nebula, nebulaRec, nebulaPos, WHITE);
+        // draw scarfy
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
 
         if(scarfyPos.y >= WINDOW_H - scarfyRec.height){
@@ -74,12 +83,17 @@ int main(){
             isInAir = true;
         }
 
+        // update nebula position
+        nebulaPos.x += nebVel * DT;
+
+        // update scarfy position
         scarfyPos.y += velocity * DT;
 
         EndDrawing();
     }
 
     UnloadTexture(scarfy);
+    UnloadTexture(nebula);
     CloseWindow();
 
 }
