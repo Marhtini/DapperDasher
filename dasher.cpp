@@ -14,6 +14,24 @@ bool isOnGround(AnimData data, int windowHeight){
     return data.pos.y >= windowHeight - data.rec.height;
 }
 
+AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame){
+    // update running time
+    data.runningTime += deltaTime;
+    if (data.runningTime >= data.updateTime){
+        
+        data.runningTime = 0.0;
+        
+        // update animation frame
+        data.rec.x = data.frame * data.rec.width;
+        data.frame++;
+        if (data.frame > maxFrame){
+            data.frame = 0;
+        }
+    }
+
+    return data;
+}
+
 int main(){
 
     const int WINDOW_DIM[2]{512, 380};
@@ -70,30 +88,13 @@ int main(){
         const float DT{GetFrameTime()};
         
         // update scarfy animation frame
-        scarfyData.runningTime += DT;
-        if (scarfyData.runningTime >= scarfyData.updateTime && !isInAir){
-            scarfyData.runningTime = 0.0;
 
-            // for drawing/updating which sprite to use on the sprite sheet
-            scarfyData.rec.x = scarfyData.frame * scarfyData.rec.width;
-            scarfyData.frame++;
-            if (scarfyData.frame > 5){
-                scarfyData.frame = 0;
-            }
+        if (!isInAir){
+            scarfyData = updateAnimData(scarfyData, DT, 5);
         }
 
         for (int i = 0; i < SIZE_OF_NEBULAE; i++){
-            nebulae[i].runningTime += DT;
-            if (nebulae[i].runningTime >= nebulae[i].updateTime){
-                nebulae[i].runningTime = 0.0;
-                nebulae[i].rec.x = nebulae[i].frame * nebulae[i].rec.width;
-                nebulae[i].frame++;
-            
-            if (nebulae[i].frame > 7){
-                nebulae[i].frame = 0;
-            }
-        
-            }
+            nebulae[i] = updateAnimData(nebulae[i], DT, 7);
         }
 
         BeginDrawing();
