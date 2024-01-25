@@ -80,6 +80,15 @@ int main(){
     bool isInAir{false};
     int velocity{0};
 
+    Texture2D bg = LoadTexture("textures/far-buildings.png");
+    float bgX{0};
+
+    Texture2D mg = LoadTexture("textures/back-buildings.png");
+    float mgX{0};
+
+    Texture2D fg = LoadTexture("textures/foreground.png");
+    float fgX{0};
+
     SetTargetFPS(60);
 
     while(!WindowShouldClose()){
@@ -99,6 +108,39 @@ int main(){
 
         BeginDrawing();
         ClearBackground(WHITE);
+
+        // scroll the background
+        bgX -= 20 * DT;
+        if (bgX <= -bg.width * 2){
+            bgX = 0.0;
+        }
+
+        // scroll the midground
+        mgX -= 40 * DT;
+        if (mgX <= -mg.width * 2){
+            mgX = 0.0;
+        }
+
+        fgX -= 80 * DT;
+        if (fgX <= -fg.width * 2){
+            fgX = 0.0;
+        }
+
+        // draw scrolling backgrounds
+        Vector2 bg1Pos{bgX, 0.0};
+        DrawTextureEx(bg, bg1Pos, 0.0, 2.0, WHITE);
+        Vector2 bg2Pos{bgX + bg.width*2, 0.0};
+        DrawTextureEx(bg, bg2Pos, 0.0, 2.0, WHITE);
+       
+        Vector2 mg1Pos{mgX, 0.0};
+        DrawTextureEx(mg, mg1Pos, 0.0, 2.0, WHITE);
+        Vector2 mg2Pos{mgX + mg.width*2, 0.0};
+        DrawTextureEx(mg, mg2Pos, 0.0, 2.0, WHITE);
+
+        Vector2 fg1Pos{fgX, 0.0};
+        DrawTextureEx(fg, fg1Pos, 0.0, 2.0, WHITE);
+        Vector2 fg2Pos{fgX + fg.width*2, 0.0};
+        DrawTextureEx(fg, fg2Pos, 0.0, 2.0, WHITE);
         
         // draw nebulae
         for (int i = 0; i < SIZE_OF_NEBULAE; i++){
@@ -137,6 +179,9 @@ int main(){
 
     UnloadTexture(scarfy);
     UnloadTexture(nebula);
+    UnloadTexture(bg);
+    UnloadTexture(mg);
+    UnloadTexture(fg);
     CloseWindow();
 
 }
