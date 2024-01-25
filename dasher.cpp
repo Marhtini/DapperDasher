@@ -10,6 +10,10 @@ struct AnimData{
 
 AnimData scarfyData;
 
+bool isOnGround(AnimData data, int windowHeight){
+    return data.pos.y >= windowHeight - data.rec.height;
+}
+
 int main(){
 
     const int WINDOW_DIM[2]{512, 380};
@@ -95,6 +99,7 @@ int main(){
         BeginDrawing();
         ClearBackground(WHITE);
         
+        // draw nebulae
         for (int i = 0; i < SIZE_OF_NEBULAE; i++){
             DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
         }
@@ -102,7 +107,7 @@ int main(){
         // draw scarfy
         DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
 
-        if(scarfyData.pos.y >= WINDOW_DIM[1] - scarfyData.rec.height){
+        if(isOnGround(scarfyData,WINDOW_DIM[1])){
             // keep your feet on the ground!
             velocity = 0;
             isInAir = false;
