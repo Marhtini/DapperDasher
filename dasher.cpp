@@ -14,9 +14,8 @@ AnimData scarfyData;
 
 int main(){
 
-    const int WINDOW_W{1920};
-    const int WINDOW_H{1080};
-    InitWindow(WINDOW_W, WINDOW_H, "Dapper Dasher");
+    const int WINDOW_DIM[2] = {512, 380};
+    InitWindow(WINDOW_DIM[0], WINDOW_DIM[1], "Dapper Dasher");
 
     // acceleration due to gravity (pixels/s)/s
     const int GRAV{1000};
@@ -28,7 +27,7 @@ int main(){
 
     AnimData nebData{
         {0.0, 0.0, nebula.width/8, nebula.height/8}, // Rectangle rec
-        {WINDOW_W, WINDOW_H - nebula.height / 8}, // Vector2 pos
+        {WINDOW_DIM[0], WINDOW_DIM[1] - nebula.height / 8}, // Vector2 pos
         0, // int frame
         1.0 / 12.0, // float updateTime
         0.0 // float runningTime
@@ -36,7 +35,7 @@ int main(){
 
     AnimData neb2Data{
         {0.0, 0.0, nebula.width/8, nebula.height/8}, // Rectangle rec
-        {WINDOW_W + 300, WINDOW_H - nebula.height/8}, // Vector2 pos
+        {WINDOW_DIM[0] + 300, WINDOW_DIM[1] - nebula.height/8}, // Vector2 pos
         0, // int frame
         1.0 / 16.0, // float updateTime
         0.0 // float runningTime
@@ -50,7 +49,7 @@ int main(){
 
     AnimData scarfyData{
         {0.0, 0.0, scarfy.width/6, scarfy.height}, 
-        {WINDOW_W/2 - scarfyData.rec.width/2, WINDOW_H - scarfyData.rec.height}, 
+        {WINDOW_DIM[0]/2 - scarfyData.rec.width/2, WINDOW_DIM[1] - scarfyData.rec.height}, 
         0, 
         1.0 / 12.0, 
         0.0
@@ -115,7 +114,7 @@ int main(){
         // draw scarfy
         DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
 
-        if(scarfyData.pos.y >= WINDOW_H - scarfyData.rec.height){
+        if(scarfyData.pos.y >= WINDOW_DIM[1] - scarfyData.rec.height){
             // keep your feet on the ground!
             velocity = 0;
             isInAir = false;
