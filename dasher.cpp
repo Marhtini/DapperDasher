@@ -186,8 +186,6 @@ int main(){
         DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
         }
 
-
-
         if(isOnGround(scarfyData,WINDOW_DIM[1])){
             // keep your feet on the ground!
             velocity = 0;
